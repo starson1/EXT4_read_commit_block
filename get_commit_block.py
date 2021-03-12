@@ -33,7 +33,6 @@ off = 0x418
 pay = 'xxd -l 0x10 -s '+str(hex(off))+' '+location
 res = os.popen(pay).read()[10:19]
 block_size=pow(2,int(endian_8(res),16)) * 0x400
-print(hex(block_size))
 
 
 #1-1 : Group Descriptor (offset : 0x1008~0x1009)
@@ -41,7 +40,6 @@ off = 0x1008
 pay = 'xxd -l 0x10 -s '+str(hex(off))+' '+location
 res = os.popen(pay).read()
 inode = int(endian_4(res[10:15]),16)
-print("inode no8(journal) offset : "+str(hex(inode)))
 
 #1-2 : I-node table (offset 0x3c~0x3F)
 off = 0x3C + inode*block_size+ 7*inode_size
@@ -63,6 +61,7 @@ for i in range(len(res)):
 #1-4 : Read commit Block
 for loc in idx:
     off = jrnl + loc*block_size
-    pay = 'xxd -l 0x10 -s '+str(hex(off))+' '+location
+    pay = 'xxd -l 0x40 -s '+str(hex(off))+' '+location
     res = os.popen(pay).read()[:-1]
     print(res)
+    print("")
